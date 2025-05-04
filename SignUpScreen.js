@@ -3,11 +3,13 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from "rea
 import { signUp } from "./AuthService";
 import { auth, db } from "./firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { useNavigation } from "@react-navigation/native";
 
-export default function SignUpScreen({ navigation }) {
+export default function SignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigation = useNavigation();
 
   const handleSignUp = async () => {
     try {
@@ -19,6 +21,7 @@ export default function SignUpScreen({ navigation }) {
       const user = await signUp(email, password);
 
       console.log("Signed up:", user.email);
+      navigation.navigate("MainGame");
     } catch (error) {
       console.error("Signup Error:", error.message);
       alert("Error signing up: " + error.message); // Display error message to the user

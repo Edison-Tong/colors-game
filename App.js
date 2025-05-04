@@ -1,23 +1,3 @@
-// import React, { useState } from "react";
-// import LoginScreen from "./LoginScreen";
-// import SignUpScreen from "./SignUpScreen";
-// import MainGame from "./MainGame";
-
-// export default function App() {
-//   const [user, setUser] = useState(null);
-//   const [screen, setScreen] = useState("signup"); // can be "signup" or "login"
-
-//   if (!user) {
-//     if (screen === "signup") {
-//       return <SignUpScreen onSwitch={() => setScreen("login")} onLogin={setUser} />;
-//     } else {
-//       return <LoginScreen onSwitch={() => setScreen("signup")} onLogin={setUser} />;
-//     }
-//   }
-
-//   return <MainGame user={user} />;
-// }
-
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
