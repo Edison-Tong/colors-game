@@ -31,7 +31,7 @@ export default function LoginScreen({ onLogin }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Colors</Text>
+      <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -46,13 +46,13 @@ export default function LoginScreen({ onLogin }) {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login / Sign Up" onPress={handleLoginOrSignUp} />
+      <Button title="Login" onPress={handleLoginOrSignUp} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#101010", justifyContent: "center", alignItems: "center", padding: 20 },
+  container: { flex: 1, backgroundColor: "maroon", justifyContent: "center", alignItems: "center", padding: 20 },
   title: { fontSize: 28, fontWeight: "bold", marginBottom: 40, color: "white" },
   input: { width: "100%", backgroundColor: "#fff", padding: 15, borderRadius: 10, marginBottom: 20, fontSize: 16 },
 });

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import PagerView from "react-native-pager-view";
 import CharacterCard from "./CharacterCard";
 
-export default function App() {
+export default function MainGame() {
   const characters = [
     {
       name: "",
