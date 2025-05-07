@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { signUp } from "./AuthService";
 import { auth, db } from "./firebase";
 import { doc, setDoc } from "firebase/firestore";
@@ -21,7 +28,7 @@ export default function SignUpScreen() {
       const user = await signUp(email, password);
 
       console.log("Signed up:", user.email);
-      navigation.navigate("MainGame");
+      navigation.navigate("StartScreen");
     } catch (error) {
       console.error("Signup Error:", error.message);
       alert("Error signing up: " + error.message); // Display error message to the user
@@ -31,7 +38,12 @@ export default function SignUpScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
-      <TextInput style={styles.input} placeholder="Email" onChangeText={setEmail} value={email} />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        onChangeText={setEmail}
+        value={email}
+      />
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -55,8 +67,21 @@ export default function SignUpScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "maroon", justifyContent: "center", alignItems: "center", padding: 20 },
+  container: {
+    flex: 1,
+    backgroundColor: "maroon",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
   title: { fontSize: 28, fontWeight: "bold", marginBottom: 40, color: "white" },
-  input: { width: "100%", backgroundColor: "#fff", padding: 15, borderRadius: 10, marginBottom: 20, fontSize: 16 },
+  input: {
+    width: "100%",
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    fontSize: 16,
+  },
   switch: { color: "lightblue", marginTop: 15, textAlign: "center" },
 });

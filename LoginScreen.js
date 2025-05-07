@@ -1,7 +1,10 @@
 // LoginScreen.js
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "./firebase";
 import { useNavigation } from "@react-navigation/native";
 
@@ -17,8 +20,12 @@ export default function LoginScreen() {
     }
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, username, password);
-      navigation.navigate("MainGame");
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        username,
+        password
+      );
+      navigation.navigate("StartScreen");
     } catch (error) {
       Alert.alert("Login Failed", error.message);
     }
@@ -47,7 +54,20 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "maroon", justifyContent: "center", alignItems: "center", padding: 20 },
+  container: {
+    flex: 1,
+    backgroundColor: "maroon",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
   title: { fontSize: 28, fontWeight: "bold", marginBottom: 40, color: "white" },
-  input: { width: "100%", backgroundColor: "#fff", padding: 15, borderRadius: 10, marginBottom: 20, fontSize: 16 },
+  input: {
+    width: "100%",
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    fontSize: 16,
+  },
 });
