@@ -1,26 +1,19 @@
 {
-  "cli": {
-    "version": ">= 3.0.0"
-  },
-
   "build": {
-    "ad-hoc": {
+    "preview": {
+      "distribution": "internal",
       "ios": {
-        "distribution": "internal"
+        "buildConfiguration": "Release"
       }
     },
-
-    "preview": {
-      "distribution": "internal"
-    },
-
     "production": {
-      "android": {
-        "buildType": "apk"
-      },
       "ios": {
+        "buildConfiguration": "Release",
         "distribution": "store"
       }
     }
+  },
+  "submit": {
+    "production": {}
   }
 }
