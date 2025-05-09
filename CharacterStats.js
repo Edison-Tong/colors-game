@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Button,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function CharacterStats() {
@@ -29,36 +36,38 @@ export default function CharacterStats() {
   );
 
   return (
-    <View>
-      <Text>Determine character stats</Text>
-      {Object.keys(stats).map((key) => (
-        <View style={styles.row} key={key}>
-          <Text style={styles.label}>{key}</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            value={stats[key]}
-            onChangeText={(value) => handleChange(key, value)}
-          />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View>
+        <Text>Determine character stats</Text>
+        {Object.keys(stats).map((key) => (
+          <View style={styles.row} key={key}>
+            <Text style={styles.label}>{key}</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              value={stats[key]}
+              onChangeText={(value) => handleChange(key, value)}
+            />
+          </View>
+        ))}
+        <View style={styles.row}>
+          <Text style={styles.label}>Total</Text>
+          <Text
+            style={[
+              styles.total,
+              total > 70 && { color: "red", fontWeight: "bold" },
+            ]}
+          >
+            {total}
+          </Text>
         </View>
-      ))}
-      <View style={styles.row}>
-        <Text style={styles.label}>Total</Text>
-        <Text
-          style={[
-            styles.total,
-            total > 70 && { color: "red", fontWeight: "bold" },
-          ]}
-        >
-          {total}
-        </Text>
+        <Button
+          title="continue"
+          onPress={() => navigation.navigate("CharacterWeapon")}
+          disabled={total > 70}
+        />
       </View>
-      <Button
-        title="continue"
-        onPress={() => navigation.navigate("CharacterWeapon")}
-        disabled={total > 70}
-      />
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

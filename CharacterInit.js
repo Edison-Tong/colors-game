@@ -1,4 +1,11 @@
-import { View, Text, TextInput, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Button,
+  TouchableWithoutFeedback,
+} from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -23,42 +30,44 @@ export default function CharacterInit() {
   ];
 
   return (
-    <View style={styles.container}>
-      <Text>Character Name</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Sir Alfred Von Wingle-heimer"
-      />
-      <Text>Character Label</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Archer, Speed type, Rogue etc"
-      />
-      <Text>Unit Type</Text>
-      <DropDownPicker
-        open={openDropdown === "unit"}
-        value={unitValue}
-        items={unitItems}
-        setOpen={(isOpen) => setOpenDropdown(isOpen ? "unit" : null)}
-        setValue={setUnitValue}
-        zIndex={3000}
-        zIndexInverse={1000}
-      />
-      <Text>Pick your size</Text>
-      <DropDownPicker
-        open={openDropdown === "size"}
-        value={sizeValue}
-        items={sizeItems}
-        setOpen={(isOpen) => setOpenDropdown(isOpen ? "size" : null)}
-        setValue={setSizeValue}
-        zIndex={2000}
-        zIndexInverse={2000}
-      />
-      <Button
-        title="Continue"
-        onPress={() => navigation.navigate("CharacterStats")}
-      />
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text>Character Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Sir Alfred Von Wingle-heimer"
+        />
+        <Text>Character Label</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Archer, Speed type, Rogue etc"
+        />
+        <Text>Unit Type</Text>
+        <DropDownPicker
+          open={openDropdown === "unit"}
+          value={unitValue}
+          items={unitItems}
+          setOpen={(isOpen) => setOpenDropdown(isOpen ? "unit" : null)}
+          setValue={setUnitValue}
+          zIndex={3000}
+          zIndexInverse={1000}
+        />
+        <Text>Pick your size</Text>
+        <DropDownPicker
+          open={openDropdown === "size"}
+          value={sizeValue}
+          items={sizeItems}
+          setOpen={(isOpen) => setOpenDropdown(isOpen ? "size" : null)}
+          setValue={setSizeValue}
+          zIndex={2000}
+          zIndexInverse={2000}
+        />
+        <Button
+          title="Continue"
+          onPress={() => navigation.navigate("CharacterStats")}
+        />
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
