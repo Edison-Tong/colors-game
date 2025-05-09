@@ -5,6 +5,7 @@ import {
   TextInput,
   StyleSheet,
   Button,
+  Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";

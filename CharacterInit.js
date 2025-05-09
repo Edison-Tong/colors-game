@@ -4,6 +4,7 @@ import {
   TextInput,
   StyleSheet,
   Button,
+  Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
 import React, { useState } from "react";

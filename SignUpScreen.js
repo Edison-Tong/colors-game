@@ -6,6 +6,7 @@ import {
   Button,
   StyleSheet,
   TouchableOpacity,
+  Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
 import { signUp } from "./AuthService";
