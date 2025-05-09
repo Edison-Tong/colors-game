@@ -19,7 +19,7 @@ export default function LoginScreen() {
       return;
     }
 
-    if (username === "test" && password === "test") {
+    if (username === "t" && password === "t") {
       navigation.navigate("StartScreen");
       return;
     }

@@ -2,15 +2,15 @@ import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function CharacterStats() {
+export default function CharacterWeapon() {
   const navigation = useNavigation();
 
   return (
     <View>
-      <Text>Determine character stats</Text>
+      <Text>Pick a weapon</Text>
       <Button
-        title="continue"
-        onPress={() => navigation.navigate("CharacterWeapon")}
+        title="Continue"
+        onPress={() => navigation.navigate("CharacterSummary")}
       />
     </View>
   );
