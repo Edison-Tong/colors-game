@@ -1,16 +1,18 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import PagerView from "react-native-pager-view";
+import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
 import CharacterCard from "./CharacterCard";
+import { useNavigation } from "@react-navigation/native";
 
 export default function StartScreen() {
-  function createNewTeam() {
-    alert("New Team Creation");
-  }
+  const navigation = useNavigation();
 
   return (
     <View style={styles.newCharBtn}>
-      <Button title="CreateNewTeam" onPress={createNewTeam} />
+      <TouchableOpacity
+        onPress={() => navigation.navigate("TeamCreationScreen")}
+      >
+        <Text style={styles.Btn}>Create New Team</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -22,5 +24,11 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  Btn: {
+    color: "white",
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 50,
   },
 });

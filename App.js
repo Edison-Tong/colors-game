@@ -4,7 +4,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignUpScreen from "./SignUpScreen";
 import LoginScreen from "./LoginScreen";
 import StartScreen from "./StartScreen";
-console.log("App component rendered");
+import TeamCreationScreen from "./TeamCreationScreen";
+import { Text } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,10 @@ export default function App() {
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="StartScreen" component={StartScreen} />
+        <Stack.Screen
+          name="TeamCreationScreen"
+          component={TeamCreationScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
