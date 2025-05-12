@@ -13,15 +13,15 @@ import { useNavigation } from "@react-navigation/native";
 export default function CharacterStats() {
   const navigation = useNavigation();
   const [stats, setStats] = useState({
-    Health: "",
-    Strength: "",
-    Defense: "",
-    Magic: "",
-    Resistance: "",
-    Speed: "",
-    Skill: "",
-    Knowledge: "",
-    Luck: "",
+    Health: "4",
+    Strength: "4",
+    Defense: "4",
+    Magic: "4",
+    Resistance: "4",
+    Speed: "4",
+    Skill: "4",
+    Knowledge: "4",
+    Luck: "4",
   });
 
   const handleChange = (key, value) => {
@@ -41,10 +41,22 @@ export default function CharacterStats() {
       <View>
         <Text>Determine character stats</Text>
         {Object.keys(stats).map((key) => (
-          <View style={styles.row} key={key}>
+          <View style={[styles.row]} key={key}>
             <Text style={styles.label}>{key}</Text>
             <TextInput
-              style={styles.input}
+              style={[
+                styles.input,
+                key === "Health" && stats["Health"] > 12
+                  ? {
+                      color: "red",
+                      fontWeight: "bold",
+                    }
+                  : "",
+                stats[key] < 4 && {
+                  color: "red",
+                  fontWeight: "bold",
+                },
+              ]}
               keyboardType="numeric"
               value={stats[key]}
               onChangeText={(value) => handleChange(key, value)}
@@ -65,8 +77,21 @@ export default function CharacterStats() {
         <Button
           title="continue"
           onPress={() => navigation.navigate("CharacterWeapon")}
-          disabled={total > 70}
+          disabled={
+            total !== 70 ||
+            Object.values(stats).some((val) => parseInt(val) < 4) ||
+            stats["Health"] > 12
+          }
         />
+        <Text style={{ fontSize: 30, fontWeight: "bold", color: "red" }}>
+          Total stats must add up to 70.
+        </Text>
+        <Text style={{ fontSize: 30, fontWeight: "bold", color: "red" }}>
+          Each stat must be a minimum of 4.{" "}
+        </Text>
+        <Text style={{ fontSize: 30, fontWeight: "bold", color: "red" }}>
+          The health stat cannot start higher than 12.
+        </Text>
       </View>
     </TouchableWithoutFeedback>
   );

@@ -53,6 +53,8 @@ export default function CharacterInit() {
           zIndex={3000}
           zIndexInverse={1000}
         />
+        <Text>Movement</Text>
+        <Text>{unitValue === "Mage" ? 4 : 5}</Text>
         <Text>Pick your size</Text>
         <DropDownPicker
           open={openDropdown === "size"}
@@ -66,6 +68,7 @@ export default function CharacterInit() {
         <Button
           title="Continue"
           onPress={() => navigation.navigate("CharacterStats")}
+          disabled={unitValue === null || sizeValue === null}
         />
       </View>
     </TouchableWithoutFeedback>
