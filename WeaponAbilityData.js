@@ -723,4 +723,5 @@ export const weaponAbilities = {
       effect: "A curse to the monotheistic, damaging them for 2 turns",
     },
   ],
+  default: [],
 };
