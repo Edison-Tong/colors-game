@@ -7,14 +7,18 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
+import { CharacterContext } from "./CharacterContext";
 
 export default function CharacterInit() {
   const navigation = useNavigation();
+  const { character, setCharacter } = useContext(CharacterContext);
 
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [name, setName] = useState(character.name);
+  const [label, setLabel] = useState(character.label);
   const [unitValue, setUnitValue] = useState(null);
   const [sizeValue, setSizeValue] = useState(null);
 
@@ -37,11 +41,15 @@ export default function CharacterInit() {
         <TextInput
           style={styles.input}
           placeholder="Sir Alfred Von Wingle-heimer"
+          value={name}
+          onChangeText={setName}
         />
         <Text>Character Label</Text>
         <TextInput
           style={styles.input}
           placeholder="Archer, Speed type, Rogue etc"
+          value={label}
+          onChangeText={setLabel}
         />
         <Text>Unit Type</Text>
         <DropDownPicker
@@ -67,7 +75,17 @@ export default function CharacterInit() {
         />
         <Button
           title="Continue"
-          onPress={() => navigation.navigate("CharacterStats")}
+          onPress={() => {
+            setCharacter((prev) => ({
+              ...prev,
+              name,
+              label,
+              move: unitValue === "Mage" ? 4 : 5,
+              unitType: unitValue,
+              size: sizeValue,
+            }));
+            navigation.navigate("CharacterStats");
+          }}
           disabled={unitValue === null || sizeValue === null}
         />
       </View>
