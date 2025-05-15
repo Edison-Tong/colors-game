@@ -21,6 +21,7 @@ export default function CharacterWeapon() {
   const abilityOptions = currentAbilities.map((ability) => ({
     label: ability.name,
     value: ability.name,
+    disabled: ability.name === ability1 || ability.name === ability2,
   }));
 
   const meleeWeapons = [
@@ -154,6 +155,7 @@ export default function CharacterWeapon() {
             zIndex={3000}
             zIndexInverse={1000}
             style={{ width: 150, marginBottom: 20 }}
+            disabledItemLabelStyle={{ color: "gray" }}
           />
           <View style={styles.weaponStats}>
             <Text>Hit%: {selectedSkills[0].hitChance ?? 0}</Text>
@@ -179,6 +181,7 @@ export default function CharacterWeapon() {
             zIndex={2000}
             zIndexInverse={500}
             style={{ width: 150, marginBottom: 20 }}
+            disabledItemLabelStyle={{ color: "gray" }}
           />
           <View style={styles.weaponStats}>
             <Text>Hit%: {selectedSkills[1].hitChance ?? 0}</Text>
