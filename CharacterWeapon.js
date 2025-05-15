@@ -18,6 +18,7 @@ export default function CharacterWeapon() {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const currentAbilities = weaponAbilities[weapon] || [];
+
   const abilityOptions = currentAbilities.map((ability) => ({
     label: ability.name,
     value: ability.name,
@@ -200,7 +201,14 @@ export default function CharacterWeapon() {
       <Button
         style={styles.submit}
         title="Continue"
-        onPress={() => navigation.navigate("CharacterSummary")}
+        onPress={() => {
+          setCharacter((prev) => ({
+            ...prev,
+            weapon: selectedWeapon,
+            weaponSkills: selectedSkills,
+          }));
+          navigation.navigate("CharacterSummary");
+        }}
       />
     </View>
   );

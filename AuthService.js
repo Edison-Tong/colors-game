@@ -11,7 +11,6 @@ export const signUp = async (email, password) => {
       password
     );
     const user = userCredential.user;
-    console.log("test1");
     const timeout = new Promise((_, reject) =>
       setTimeout(() => reject(new Error("Firestore write timed out")), 5000)
     );
@@ -22,7 +21,6 @@ export const signUp = async (email, password) => {
           email: user.email,
           createdAt: new Date(),
         }),
-        timeout,
       ]);
       console.log("Firestore write successful");
     } catch (firestoreError) {
