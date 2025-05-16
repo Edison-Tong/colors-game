@@ -12,7 +12,14 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { collection, doc, setDoc, getDocs, getDoc, query } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+  getDoc,
+  query,
+} from "firebase/firestore";
 import { db, auth } from "./firebase";
 
 export default function StartScreen() {
@@ -29,7 +36,7 @@ export default function StartScreen() {
     const fetchTeams = async () => {
       try {
         if (!user) return;
-        const teamsRef = query(collection(db, "users", user.uid, "teams"));
+        const teamsRef = query(collection(db, "Teams", user.uid, "teams"));
         const querySnapshot = await getDocs(teamsRef);
 
         const userTeams = querySnapshot.docs.map((doc) => ({
@@ -63,7 +70,7 @@ export default function StartScreen() {
       const teamId = teamName.trim().toLowerCase().replace(/\s+/g, "_");
 
       // Create a reference using setDoc with a custom ID
-      const newTeamRef = doc(db, "users", user.uid, "teams", teamId);
+      const newTeamRef = doc(db, "Teams", user.uid, "teams", teamId);
 
       // Check if team with this ID already exists
       const docSnap = await getDoc(newTeamRef);
@@ -83,7 +90,10 @@ export default function StartScreen() {
       setModalVisible(false);
       setTeamName("");
 
-      setTeams((prev) => [...prev, { id: teamId, name: teamName.trim(), ownerUID: user.uid }]);
+      setTeams((prev) => [
+        ...prev,
+        { id: teamId, name: teamName.trim(), ownerUID: user.uid },
+      ]);
 
       navigation.navigate("TeamCreationScreen", {
         teamName,
@@ -137,14 +147,23 @@ export default function StartScreen() {
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Enter Team Name</Text>
-            <TextInput style={styles.input} placeholder="Team Name" value={teamName} onChangeText={setTeamName} />
+            <TextInput
+              style={styles.input}
+              placeholder="Team Name"
+              value={teamName}
+              onChangeText={setTeamName}
+            />
 
             {loading ? (
               <ActivityIndicator size="large" />
             ) : (
               <View style={styles.modalButtons}>
                 <Button title="Cancel" onPress={() => setModalVisible(false)} />
-                <Button title="Continue" onPress={handleContinue} disabled={teamName.trim() === ""} />
+                <Button
+                  title="Continue"
+                  onPress={handleContinue}
+                  disabled={teamName.trim() === ""}
+                />
               </View>
             )}
           </View>
