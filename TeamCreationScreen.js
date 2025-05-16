@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import PagerView from "react-native-pager-view";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { CharacterContext } from "./CharacterContext";
 import { collection, getDocs } from "firebase/firestore";
 import { db, auth } from "./firebase";
@@ -21,36 +21,39 @@ export default function TeamCreationScreen() {
   const userId = auth.currentUser?.uid;
   const teamId = character.teamId;
 
-  useEffect(() => {
-    async function fetchCharacters() {
-      try {
-        const charsRef = collection(
-          db,
-          "teams",
-          userId,
-          "teamList",
-          teamId,
-          "characters"
-        );
-        const querySnapshot = await getDocs(charsRef);
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchCharacters() {
+        if (!teamId || !userId) return;
 
-        const loadedChars = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        try {
+          setLoading(true);
+          const charsRef = collection(
+            db,
+            "teams",
+            userId,
+            "teamList",
+            teamId,
+            "characters"
+          );
+          const querySnapshot = await getDocs(charsRef);
 
-        setCharacters(loadedChars);
-      } catch (error) {
-        console.error("Error fetching characters:", error);
-      } finally {
-        setLoading(false);
+          const loadedChars = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          setCharacters(loadedChars);
+        } catch (error) {
+          console.error("Error fetching characters:", error);
+        } finally {
+          setLoading(false);
+        }
       }
-    }
 
-    if (teamId && userId) {
       fetchCharacters();
-    }
-  }, [teamId, userId]);
+    }, [teamId, userId])
+  );
 
   if (loading) {
     return (
