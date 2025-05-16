@@ -12,7 +12,7 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, getDoc, query } from "firebase/firestore";
 import { db, auth } from "./firebase";
 
 export default function StartScreen() {
@@ -25,14 +25,12 @@ export default function StartScreen() {
   const [teams, setTeams] = useState([]);
   const [fetchingTeams, setFetchingTeams] = useState(true);
 
-  // Fetch user's teams when component mounts
   useEffect(() => {
     const fetchTeams = async () => {
       try {
         if (!user) return;
-
-        const q = query(collection(db, "teams"), where("ownerUID", "==", user.uid));
-        const querySnapshot = await getDocs(q);
+        const teamsRef = query(collection(db, "users", user.uid, "teams"));
+        const querySnapshot = await getDocs(teamsRef);
 
         const userTeams = querySnapshot.docs.map((doc) => ({
           id: doc.id,
@@ -53,11 +51,30 @@ export default function StartScreen() {
 
   const handleContinue = async () => {
     if (!teamName.trim()) return;
+    if (!user?.uid) {
+      Alert.alert("Error", "User not authenticated.");
+      return;
+    }
 
     setLoading(true);
 
     try {
-      const docRef = await addDoc(collection(db, "teams"), {
+      // Sanitize team name to use as document ID (slugify it)
+      const teamId = teamName.trim().toLowerCase().replace(/\s+/g, "_");
+
+      // Create a reference using setDoc with a custom ID
+      const newTeamRef = doc(db, "users", user.uid, "teams", teamId);
+
+      // Check if team with this ID already exists
+      const docSnap = await getDoc(newTeamRef);
+      if (docSnap.exists()) {
+        Alert.alert("Error", "A team with this name already exists.");
+        setLoading(false);
+        return;
+      }
+
+      // Create the new team document
+      await setDoc(newTeamRef, {
         name: teamName.trim(),
         createdAt: new Date(),
         ownerUID: user.uid,
@@ -66,12 +83,11 @@ export default function StartScreen() {
       setModalVisible(false);
       setTeamName("");
 
-      // Add new team to local state so it shows up right away
-      setTeams((prev) => [...prev, { id: docRef.id, name: teamName.trim(), ownerUID: user.uid }]);
+      setTeams((prev) => [...prev, { id: teamId, name: teamName.trim(), ownerUID: user.uid }]);
 
       navigation.navigate("TeamCreationScreen", {
         teamName,
-        teamId: docRef.id,
+        teamId: teamId,
       });
     } catch (error) {
       Alert.alert("Error", "Failed to save team. Please try again.");
@@ -112,7 +128,6 @@ export default function StartScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Modal for entering team name */}
       <Modal
         visible={modalVisible}
         animationType="slide"
