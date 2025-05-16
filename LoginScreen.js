@@ -1,19 +1,7 @@
 // LoginScreen.js
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  Alert,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from "react-native";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { View, Text, TextInput, Button, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebase";
 import { useNavigation } from "@react-navigation/native";
 
@@ -32,15 +20,8 @@ export default function LoginScreen() {
       navigation.navigate("StartScreen");
       return;
     }
-    console.log("test");
     try {
-      console.log("userCredential");
-
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        username,
-        password
-      );
+      const userCredential = await signInWithEmailAndPassword(auth, username, password);
       navigation.navigate("StartScreen");
     } catch (error) {
       Alert.alert("Login Failed", error.message);
