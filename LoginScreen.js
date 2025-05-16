@@ -32,8 +32,10 @@ export default function LoginScreen() {
       navigation.navigate("StartScreen");
       return;
     }
-
+    console.log("test");
     try {
+      console.log("userCredential");
+
       const userCredential = await signInWithEmailAndPassword(
         auth,
         username,

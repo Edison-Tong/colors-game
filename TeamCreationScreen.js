@@ -9,54 +9,6 @@ export default function TeamCreationScreen() {
   return (
     <PagerView style={styles.pagerView} initialPage={0}>
       <View key="1" style={styles.teamView}>
-        {/* temporary Just here for looks */}
-
-        <View style={styles.charBoard}>
-          <Text style={styles.charName}>August</Text>
-          <Text style={styles.charSpec}>Power</Text>
-          <View style={styles.charImg}>
-            <Text>Character Image</Text>
-          </View>
-          <Text style={styles.charInfo}>Lvl: 1</Text>
-          <Text style={styles.charInfo}>Move: 4</Text>
-          <Text style={styles.charInfo}>Size: 3</Text>
-          <View style={styles.charHealth}></View>
-          <View style={styles.charExp}></View>
-          <View style={styles.charBaseStats}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Base Stats</Text>
-            <Text style={styles.charStat}>Hlth: 23</Text>
-            <Text style={styles.charStat}>Str: 11</Text>
-            <Text style={styles.charStat}>Def: 8</Text>
-            <Text style={styles.charStat}>Mgk: 0</Text>
-            <Text style={styles.charStat}>Res: 4</Text>
-            <Text style={styles.charStat}>Spd: 7</Text>
-            <Text style={styles.charStat}>Skl: 4</Text>
-            <Text style={styles.charStat}>Knl: 9</Text>
-            <Text style={styles.charStat}>Lck: 4</Text>
-            <Text style={styles.charStat}>+Move: 0</Text>
-            <Text style={styles.charStat}>+Size: 0</Text>
-            <Text style={styles.charStat}>+Ablty: 0</Text>
-            <Text style={styles.statsTotal}>Total: 70</Text>
-          </View>
-          <View style={styles.charBaseAtk}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Base Attack
-            </Text>
-            <Text style={styles.weapon}>Axe</Text>
-            <Text style={styles.atkStat}>Hit%: 75</Text>
-            <Text style={styles.atkStat}>Str: 3</Text>
-            <Text style={styles.atkStat}>Def: 2</Text>
-            <Text style={styles.atkStat}>Mgk: 0</Text>
-            <Text style={styles.atkStat}>Res: 0</Text>
-            <Text style={styles.atkStat}>Spd: 0</Text>
-            <Text style={styles.atkStat}>Skl: 0</Text>
-            <Text style={styles.atkStat}>Knl: 0</Text>
-            <Text style={styles.atkStat}>Lck: 0</Text>
-            <Text style={styles.atkStat}>Range: 1</Text>
-          </View>
-        </View>
-      </View>
-      <View key="2" style={styles.teamView}>
         <View style={styles.addCharCard}>
           <TouchableOpacity
             style={styles.addIcon}
