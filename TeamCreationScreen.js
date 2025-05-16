@@ -66,8 +66,9 @@ export default function TeamCreationScreen() {
   return (
     <PagerView style={styles.pagerView} initialPage={0}>
       {/* Existing Characters */}
-      {characters.map((char) => (
+      {characters.map((char, index) => (
         <CharacterCard
+          key={index}
           name={char.name}
           label={char.label}
           level={1}

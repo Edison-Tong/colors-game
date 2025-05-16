@@ -24,24 +24,26 @@ export default function CharacterCard({
       <Text style={styles.charInfo}>Size: {size}</Text>
       <View style={styles.charHealth}></View>
       <View style={styles.charExp}></View>
-      <View style={styles.charBaseStats}>
-        <Text style={styles.sectionTitle}>Base Stats</Text>
-        {Object.entries(stats).map(([label, value]) => (
-          <Text key={label} style={styles.charStat}>
-            {label}: {value}
-          </Text>
-        ))}
-      </View>
-      <View style={styles.charBaseAtk}>
-        <Text style={styles.sectionTitle}>Base Attack</Text>
-        <Text style={styles.weapon}>{weapon}</Text>
-        {Object.entries(weaponStats)
-          .filter(([k]) => k !== "weapon")
-          .map(([label, value]) => (
-            <Text key={label} style={styles.atkStat}>
+      <View>
+        <View style={styles.charBaseStats}>
+          <Text style={styles.sectionTitle}>Base Stats</Text>
+          {Object.entries(stats).map(([label, value]) => (
+            <Text key={label} style={styles.charStat}>
               {label}: {value}
             </Text>
           ))}
+        </View>
+        <View style={styles.charBaseAtk}>
+          <Text style={styles.sectionTitle}>Base Attack</Text>
+          <Text style={styles.weapon}>{weapon}</Text>
+          {Object.entries(weaponStats)
+            .filter(([k]) => k !== "weapon")
+            .map(([label, value]) => (
+              <Text key={label} style={styles.atkStat}>
+                {label}: {value}
+              </Text>
+            ))}
+        </View>
       </View>
     </View>
   );
@@ -49,10 +51,11 @@ export default function CharacterCard({
 
 const styles = StyleSheet.create({
   charBoard: {
-    width: "95%",
-    height: "95%",
+    flex: 1,
     backgroundColor: "grey",
-    borderRadius: 40,
+    borderRadius: 50,
+    padding: 16,
+    margin: 5,
   },
   charName: {
     fontSize: 20,
@@ -65,8 +68,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "white",
-    left: "80%",
-    top: "3%",
+    position: "absolute",
+    top: 20,
+    right: 20,
   },
   charImg: {
     width: 100,
