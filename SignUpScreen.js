@@ -9,12 +9,11 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import { signUp } from "./AuthService";
-import { auth, db } from "./firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { signUp } from "./AuthService"; // updated to include username
 import { useNavigation } from "@react-navigation/native";
 
 export default function SignUpScreen() {
+  const [username, setUsername] = useState(""); // NEW
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -22,18 +21,23 @@ export default function SignUpScreen() {
 
   const handleSignUp = async () => {
     try {
-      if (password !== confirmPassword) {
-        console.error("Passwords do not match.");
+      if (!username) {
+        alert("Please enter a username.");
         return;
       }
 
-      const user = await signUp(email, password);
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      const user = await signUp(username, email, password); // UPDATED
 
       console.log("Signed up:", user.email);
       navigation.navigate("StartScreen");
     } catch (error) {
       console.error("Signup Error:", error.message);
-      alert("Error signing up: " + error.message); // Display error message to the user
+      alert("Error signing up: " + error.message);
     }
   };
 
@@ -41,6 +45,13 @@ export default function SignUpScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <Text style={styles.title}>Sign Up</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          onChangeText={setUsername}
+          value={username}
+        />
         <TextInput
           style={styles.input}
           placeholder="Email"

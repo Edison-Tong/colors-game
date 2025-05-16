@@ -1,8 +1,18 @@
 // LoginScreen.js
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback } from "react-native";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { doc, getDoc } from "firebase/firestore";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "./firebase"; // IMPORT db as well!
 import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen() {
@@ -16,12 +26,25 @@ export default function LoginScreen() {
       return;
     }
 
-    if (username === "t" && password === "t") {
-      navigation.navigate("StartScreen");
-      return;
-    }
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, username, password);
+      // 1. Look up the email using the username
+      const usernameRef = doc(db, "usernames", username);
+      const usernameSnap = await getDoc(usernameRef);
+
+      if (!usernameSnap.exists()) {
+        Alert.alert("Login Failed", "Username does not exist");
+        return;
+      }
+
+      const email = usernameSnap.data().email;
+
+      // 2. Now sign in using email and password
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("Logged in:", userCredential.user.email);
       navigation.navigate("StartScreen");
     } catch (error) {
       Alert.alert("Login Failed", error.message);
@@ -34,7 +57,7 @@ export default function LoginScreen() {
         <Text style={styles.title}>Login</Text>
         <TextInput
           style={styles.input}
-          placeholder="Email"
+          placeholder="Username" // was "Email"
           value={username}
           onChangeText={setUsername}
           autoCapitalize="none"
