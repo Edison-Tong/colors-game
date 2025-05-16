@@ -32,6 +32,39 @@ export default function StartScreen() {
   const [teams, setTeams] = useState([]);
   const [fetchingTeams, setFetchingTeams] = useState(true);
 
+  const [username, setUsername] = useState(null);
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      if (!user) return;
+
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          setUsername(userData.username || "Player");
+        } else {
+          setUsername("Player");
+        }
+      } catch (error) {
+        console.error("Error fetching username:", error);
+        setUsername("Player");
+      }
+    };
+
+    fetchUsername();
+  }, [user]);
+
+  useEffect(() => {
+    if (username) {
+      navigation.setOptions({
+        title: `${username}'s teams`,
+      });
+    }
+  }, [username]);
+
   useEffect(() => {
     const fetchTeams = async () => {
       try {
