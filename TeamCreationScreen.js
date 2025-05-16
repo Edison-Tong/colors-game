@@ -1,22 +1,94 @@
-import React, { useContext } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import PagerView from "react-native-pager-view";
 import { useNavigation } from "@react-navigation/native";
 import { CharacterContext } from "./CharacterContext";
+import { collection, getDocs } from "firebase/firestore";
+import { db, auth } from "./firebase";
 
 export default function TeamCreationScreen() {
   const navigation = useNavigation();
   const { character, setCharacter } = useContext(CharacterContext);
+  const [characters, setCharacters] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const userId = auth.currentUser?.uid;
+  const teamId = character.teamId;
+
+  console.log("userID: ", userId);
+  console.log("teamID: ", character);
+
+  useEffect(() => {
+    async function fetchCharacters() {
+      try {
+        const charsRef = collection(
+          db,
+          "teams",
+          userId,
+          "teamList",
+          teamId,
+          "characters"
+        );
+        const querySnapshot = await getDocs(charsRef);
+
+        const loadedChars = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setCharacters(loadedChars);
+      } catch (error) {
+        console.error("Error fetching characters:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (teamId && userId) {
+      fetchCharacters();
+    }
+  }, [teamId, userId]);
+
+  if (loading) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="grey" />
+        <Text style={{ color: "grey", marginTop: 10 }}>
+          Loading characters...
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <PagerView style={styles.pagerView} initialPage={0}>
-      <View key="1" style={styles.teamView}>
+      {/* Existing Characters */}
+      {characters.map((char) => (
+        <View key={char.id} style={styles.teamView}>
+          <View style={styles.charBoard}>
+            <Text style={styles.charName}>{char.name}</Text>
+            <Text style={styles.charSpec}>{char.species}</Text>
+            <View style={styles.charImg} />
+            <Text style={styles.charInfo}>Level {char.level}</Text>
+            <View style={styles.charHealth} />
+            <View style={styles.charExp} />
+            <Text style={styles.charBaseStats}>HP: {char.hp}</Text>
+            <Text style={styles.charBaseStats}>ATK: {char.attack}</Text>
+            {/* More stats here as needed */}
+          </View>
+        </View>
+      ))}
+      {/* Add Character Card */}
+      <View key="add" style={styles.teamView}>
         <View style={styles.addCharCard}>
           <TouchableOpacity
             style={styles.addIcon}
-            onPress={() => {
-              navigation.navigate("CharacterInit");
-            }}
+            onPress={() => navigation.navigate("CharacterInit")}
           >
             <Text style={styles.plusText}>+</Text>
           </TouchableOpacity>
@@ -137,5 +209,11 @@ const styles = StyleSheet.create({
       fontWeight: "bold",
       padding: 4,
     },
+  },
+
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
