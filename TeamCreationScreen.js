@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { CharacterContext } from "./CharacterContext";
 import { collection, getDocs } from "firebase/firestore";
 import { db, auth } from "./firebase";
+import CharacterCard from "./CharacterCard";
 
 export default function TeamCreationScreen() {
   const navigation = useNavigation();
@@ -19,9 +20,6 @@ export default function TeamCreationScreen() {
   const [loading, setLoading] = useState(true);
   const userId = auth.currentUser?.uid;
   const teamId = character.teamId;
-
-  console.log("userID: ", userId);
-  console.log("teamID: ", character);
 
   useEffect(() => {
     async function fetchCharacters() {
@@ -69,19 +67,16 @@ export default function TeamCreationScreen() {
     <PagerView style={styles.pagerView} initialPage={0}>
       {/* Existing Characters */}
       {characters.map((char) => (
-        <View key={char.id} style={styles.teamView}>
-          <View style={styles.charBoard}>
-            <Text style={styles.charName}>{char.name}</Text>
-            <Text style={styles.charSpec}>{char.species}</Text>
-            <View style={styles.charImg} />
-            <Text style={styles.charInfo}>Level {char.level}</Text>
-            <View style={styles.charHealth} />
-            <View style={styles.charExp} />
-            <Text style={styles.charBaseStats}>HP: {char.hp}</Text>
-            <Text style={styles.charBaseStats}>ATK: {char.attack}</Text>
-            {/* More stats here as needed */}
-          </View>
-        </View>
+        <CharacterCard
+          name={char.name}
+          label={char.label}
+          level={1}
+          move={char.move}
+          size={char.size}
+          stats={char.stats}
+          weapon={char.weapon.label}
+          weaponStats={char.weapon.stats}
+        />
       ))}
       {/* Add Character Card */}
       <View key="add" style={styles.teamView}>

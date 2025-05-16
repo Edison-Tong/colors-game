@@ -2,11 +2,20 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-export default function CharacterCard({ name, specialization, level, move, size, stats, attack }) {
+export default function CharacterCard({
+  name,
+  label,
+  level,
+  move,
+  size,
+  stats,
+  weapon,
+  weaponStats,
+}) {
   return (
     <View style={styles.charBoard}>
       <Text style={styles.charName}>{name}</Text>
-      <Text style={styles.charSpec}>{specialization}</Text>
+      <Text style={styles.charSpec}>{label}</Text>
       <View style={styles.charImg}>
         <Text>Character Image</Text>
       </View>
@@ -22,14 +31,11 @@ export default function CharacterCard({ name, specialization, level, move, size,
             {label}: {value}
           </Text>
         ))}
-        <Text style={styles.statsTotal}>
-          Total: {Object.values(stats).reduce((acc, val) => acc + val, 0)}
-        </Text>
       </View>
       <View style={styles.charBaseAtk}>
         <Text style={styles.sectionTitle}>Base Attack</Text>
-        <Text style={styles.weapon}>{attack.weapon}</Text>
-        {Object.entries(attack)
+        <Text style={styles.weapon}>{weapon}</Text>
+        {Object.entries(weaponStats)
           .filter(([k]) => k !== "weapon")
           .map(([label, value]) => (
             <Text key={label} style={styles.atkStat}>

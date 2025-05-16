@@ -155,12 +155,14 @@ export default function StartScreen() {
           <TouchableOpacity
             key={team.id}
             style={styles.teamCard}
-            onPress={() =>
-              navigation.navigate("TeamCreationScreen", {
+            onPress={() => {
+              setCharacter((prev) => ({
+                ...prev,
                 teamName: team.name,
                 teamId: team.id,
-              })
-            }
+              }));
+              navigation.navigate("TeamCreationScreen");
+            }}
           >
             <Text style={styles.teamName}>{team.name}</Text>
           </TouchableOpacity>
