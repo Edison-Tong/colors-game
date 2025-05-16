@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   ScrollView,
@@ -12,16 +12,44 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { app } from "./firebase"; // Your firebase app init file
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { db, auth } from "./firebase";
 
 export default function StartScreen() {
   const navigation = useNavigation();
-  const db = getFirestore(app);
 
+  const user = auth.currentUser;
   const [modalVisible, setModalVisible] = useState(false);
   const [teamName, setTeamName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [teams, setTeams] = useState([]);
+  const [fetchingTeams, setFetchingTeams] = useState(true);
+
+  // Fetch user's teams when component mounts
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        if (!user) return;
+
+        const q = query(collection(db, "teams"), where("ownerUID", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+
+        const userTeams = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setTeams(userTeams);
+      } catch (error) {
+        console.error("Error fetching teams: ", error);
+        Alert.alert("Error", "Could not load your teams.");
+      } finally {
+        setFetchingTeams(false);
+      }
+    };
+
+    fetchTeams();
+  }, [user]);
 
   const handleContinue = async () => {
     if (!teamName.trim()) return;
@@ -29,31 +57,54 @@ export default function StartScreen() {
     setLoading(true);
 
     try {
-      // Save team name to Firestore collection "teams"
       const docRef = await addDoc(collection(db, "teams"), {
         name: teamName.trim(),
         createdAt: new Date(),
+        ownerUID: user.uid,
       });
 
-      setLoading(false);
       setModalVisible(false);
       setTeamName("");
 
-      // Navigate to next screen, passing the Firestore doc id and teamName
+      // Add new team to local state so it shows up right away
+      setTeams((prev) => [...prev, { id: docRef.id, name: teamName.trim(), ownerUID: user.uid }]);
+
       navigation.navigate("TeamCreationScreen", {
         teamName,
         teamId: docRef.id,
       });
     } catch (error) {
-      setLoading(false);
       Alert.alert("Error", "Failed to save team. Please try again.");
       console.error("Error adding document: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.teamsView}>
-      {/* ...existing UI... */}
+      <Text style={styles.header}>Your Teams</Text>
+
+      {fetchingTeams ? (
+        <ActivityIndicator size="large" />
+      ) : teams.length === 0 ? (
+        <Text>No teams yet. Create one below!</Text>
+      ) : (
+        teams.map((team) => (
+          <TouchableOpacity
+            key={team.id}
+            style={styles.teamCard}
+            onPress={() =>
+              navigation.navigate("TeamCreationScreen", {
+                teamName: team.name,
+                teamId: team.id,
+              })
+            }
+          >
+            <Text style={styles.teamName}>{team.name}</Text>
+          </TouchableOpacity>
+        ))
+      )}
 
       <View style={styles.newCharBtn}>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -61,6 +112,7 @@ export default function StartScreen() {
         </TouchableOpacity>
       </View>
 
+      {/* Modal for entering team name */}
       <Modal
         visible={modalVisible}
         animationType="slide"
@@ -70,23 +122,14 @@ export default function StartScreen() {
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Enter Team Name</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Team Name"
-              value={teamName}
-              onChangeText={setTeamName}
-            />
+            <TextInput style={styles.input} placeholder="Team Name" value={teamName} onChangeText={setTeamName} />
 
             {loading ? (
               <ActivityIndicator size="large" />
             ) : (
               <View style={styles.modalButtons}>
                 <Button title="Cancel" onPress={() => setModalVisible(false)} />
-                <Button
-                  title="Continue"
-                  onPress={handleContinue}
-                  disabled={teamName.trim() === ""}
-                />
+                <Button title="Continue" onPress={handleContinue} disabled={teamName.trim() === ""} />
               </View>
             )}
           </View>
@@ -103,15 +146,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 20,
   },
+  header: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
   teamCard: {
     backgroundColor: "red",
-    color: "white",
     width: "90%",
     aspectRatio: 6 / 1,
     margin: 3,
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
+  },
+  teamName: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   newCharBtn: {
     marginTop: 20,

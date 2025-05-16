@@ -1,7 +1,7 @@
 // firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAXqPSzkpLgPohi1uupqD4gs0bkekyvh5k",
@@ -20,4 +20,4 @@ const db = initializeFirestore(app, {
   useFetchStreams: false,
 });
 
-export { auth, db };
+export { app, auth, db };
