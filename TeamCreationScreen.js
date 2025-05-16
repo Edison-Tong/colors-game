@@ -7,7 +7,6 @@ import { CharacterContext } from "./CharacterContext";
 export default function TeamCreationScreen() {
   const navigation = useNavigation();
   const { character, setCharacter } = useContext(CharacterContext);
-  console.log(character);
 
   return (
     <PagerView style={styles.pagerView} initialPage={0}>

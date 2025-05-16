@@ -71,7 +71,7 @@ export default function StartScreen() {
     const fetchTeams = async () => {
       try {
         if (!user) return;
-        const teamsRef = query(collection(db, "Teams", user.uid, "teams"));
+        const teamsRef = query(collection(db, "teams", user.uid, "teamList"));
         const querySnapshot = await getDocs(teamsRef);
 
         const userTeams = querySnapshot.docs.map((doc) => ({
@@ -104,8 +104,7 @@ export default function StartScreen() {
       // Sanitize team name to use as document ID (slugify it)
       const teamId = teamName.trim().toLowerCase().replace(/\s+/g, "_");
       // Create a reference using setDoc with a custom ID
-      const newTeamRef = doc(db, "Teams", user.uid, "teams", teamId);
-
+      const newTeamRef = doc(db, "teams", user.uid, "teamList", teamId);
       // Check if team with this ID already exists
       const docSnap = await getDoc(newTeamRef);
       if (docSnap.exists()) {
