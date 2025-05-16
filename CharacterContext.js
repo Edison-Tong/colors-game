@@ -12,6 +12,8 @@ export const CharacterProvider = ({ children }) => {
     stats: {},
     weapon: "",
     weaponSkills: {},
+    teamId: null,
+    teamName: "",
   });
 
   return (

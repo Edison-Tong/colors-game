@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { CharacterContext } from "./CharacterContext";
 import {
   View,
   ScrollView,
@@ -24,6 +25,7 @@ import { db, auth } from "./firebase";
 
 export default function StartScreen() {
   const navigation = useNavigation();
+  const { setCharacter } = useContext(CharacterContext);
 
   const user = auth.currentUser;
   const [modalVisible, setModalVisible] = useState(false);
@@ -101,7 +103,6 @@ export default function StartScreen() {
     try {
       // Sanitize team name to use as document ID (slugify it)
       const teamId = teamName.trim().toLowerCase().replace(/\s+/g, "_");
-
       // Create a reference using setDoc with a custom ID
       const newTeamRef = doc(db, "Teams", user.uid, "teams", teamId);
 
@@ -118,6 +119,7 @@ export default function StartScreen() {
         name: teamName.trim(),
         createdAt: new Date(),
         ownerUID: user.uid,
+        teamId: teamId,
       });
 
       setModalVisible(false);
@@ -127,11 +129,12 @@ export default function StartScreen() {
         ...prev,
         { id: teamId, name: teamName.trim(), ownerUID: user.uid },
       ]);
-
-      navigation.navigate("TeamCreationScreen", {
-        teamName,
+      setCharacter((prev) => ({
+        ...prev,
+        teamName: teamName.trim(),
         teamId: teamId,
-      });
+      }));
+      navigation.navigate("TeamCreationScreen");
     } catch (error) {
       Alert.alert("Error", "Failed to save team. Please try again.");
       console.error("Error adding document: ", error);

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import PagerView from "react-native-pager-view";
 import { useNavigation } from "@react-navigation/native";
+import { CharacterContext } from "./CharacterContext";
 
 export default function TeamCreationScreen() {
   const navigation = useNavigation();
+  const { character, setCharacter } = useContext(CharacterContext);
+  console.log(character);
 
   return (
     <PagerView style={styles.pagerView} initialPage={0}>
@@ -12,7 +15,9 @@ export default function TeamCreationScreen() {
         <View style={styles.addCharCard}>
           <TouchableOpacity
             style={styles.addIcon}
-            onPress={() => navigation.navigate("CharacterInit")}
+            onPress={() => {
+              navigation.navigate("CharacterInit");
+            }}
           >
             <Text style={styles.plusText}>+</Text>
           </TouchableOpacity>
